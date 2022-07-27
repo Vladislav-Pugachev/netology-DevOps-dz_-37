@@ -1,0 +1,21 @@
+---
+sources:
+  my_log:
+    type: "file"
+    ignore_older_secs: 600
+    include:
+	- /home/pugachev/logs/*.log
+    read_from: "beginning"
+
+
+sinks:
+  my_sink_id:
+    type: clickhouse
+    inputs: 
+	- my_log
+    endpoint: http://${clickhouse}:8123
+    database: logs
+    table: test
+    skip_unknown_fields: true
+    compression: gzip
+    healthcheck: false

@@ -1,0 +1,50 @@
+---
+- name: install nginx
+  hosts: lighthouse-01
+  handlers:
+    - name: nginx_up
+      become: true
+      com mand: nginx
+    - name : nginx_reload
+      become: true
+      command: nginx -s reload
+  tasks:  
+    - name: install nginx
+      become: true
+      ansible.builtin.yum:
+        name: epel-release
+        state: present
+      tags: nginx
+    - name:  start nginx
+      become: true
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+      notify: nginx_up
+      tags: nginx
+    - name: configure nginx
+      become: true
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+      notify: nginx_reload
+      tags: nginx
+- name: install lighthouse
+  hosts: lighthouse-01
+  pre_tasks:
+    - name: install git
+      become: true
+      ansible.builtin.yum:
+        name: git
+        state: present
+  roles:
+    - lighthouse
+- name:  install Clickhouse
+  hosts: clickhouse-01
+  roles: 
+    - clickhouse
+- name:  install Vector 
+  hosts: vector-01
+  roles:  
+    - vector

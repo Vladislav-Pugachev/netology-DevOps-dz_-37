@@ -1,0 +1,19 @@
+---
+vector:
+  hosts:
+    vector-01:
+      ansible_host: ${vector}
+      ansible_user: centos
+      ansible_ssh_private_key_file: ./id_rsa
+clickhouse:
+  hosts:
+    clickhouse-01:
+      ansible_host: ${clickhouse}
+      ansible_user: centos
+      ansible_ssh_private_key_file: ./id_rsa
+lighthouse:
+  hosts:
+    lighthouse-01:
+      ansible_host: ${lighthouse}
+      ansible_user: centos
+      ansible_ssh_private_key_file: ./id_rsa
